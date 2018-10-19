@@ -49,10 +49,10 @@ def main():
     
     dataset = tf.data.Dataset.from_tensor_slices(x)
     
-    iter = dataset.make_one_shot_iterator()
-    el = iter.get_next()
+    iterator = dataset.make_one_shot_iterator()
+    my_data = iterator.get_next()
     
     with tf.Session() as sess:
-        print(sess.run(el))
+        print(sess.run(my_data))
     
 main()
