@@ -42,10 +42,11 @@ def main():
     print(vehicle_eng)
     # lets create at tensor of string type (rank 1 tensor)'''
     
-    #read csv file into a dataset useful for tensorflow
+    #read csv file, create an input pipeline
     CSV_PATH = './CARS.csv'
-    dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=32)
-    x = np.random.sample((100,2))
+    dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=100, header= True)
+    #print(dataset.batch(100))
+    '''x = np.random.sample((100,2))
     
     dataset = tf.data.Dataset.from_tensor_slices(x)
     
@@ -53,6 +54,23 @@ def main():
     my_data = iterator.get_next()
     
     with tf.Session() as sess:
-        print(sess.run(my_data))
+        print(sess.run(my_data))'''
+    
+    # use a placeholder
+    x = tf.placeholder(tf.float32, shape=[None,2])
+    
+    # create random float sampling
+    data = np.random.sample((100,2))
+    
+    #define an interator instance
+    iterator = dataset.make_initializable_iterator()
+    
+    #get the next values
+    iterate = iterator.get_next()
+    
+    with tf.Session() as sess:
+        sess.run(iterator.initializer, feed_dict={ x: data})
+        print(sess.run(iterate))
+    
     
 main()
