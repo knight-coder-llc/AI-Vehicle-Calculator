@@ -55,7 +55,7 @@ def main():
     
     with tf.Session() as sess:
         print(sess.run(my_data))'''
-    
+
     # use a placeholder
     x = tf.placeholder(tf.float32, shape=[None,2])
     
