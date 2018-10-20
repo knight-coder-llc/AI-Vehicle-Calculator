@@ -10,6 +10,22 @@ import csv
 import pandas as pd
 import numpy as np
 
+#create rnn model
+def rnn_model(data, num_hidden, num_labels):
+    
+    cell_fw = tf.nn.rnn_cell.RNNCell
+    cell_bw = tf.nn.rnn_cell.RNNCell
+    
+    tf.contrib.rnn.stack_bidirectional_dynamic_rnn(cell_fw, cell_bw, data)
+    '''outputs, current_state = tf.nn.dynamic_rnn(cell, data, dtype=tf.float32)
+    output = outputs[-1]
+    
+    w_softmax = tf.Variable(tf.truncated_normal([num_hidden, num_labels]))
+    b_softmax = tf.Variable(tf.random_normal([num_labels]))
+    logit = tf.matmul(output, w_softmax) + b_softmax
+    print(output)
+    return logit'''
+    
 def main():
     
     '''#set display options
@@ -70,7 +86,7 @@ def main():
     
     with tf.Session() as sess:
         sess.run(iterator.initializer, feed_dict={ x: data})
-        print(sess.run(iterate))
-    
+        #print(sess.run(iterate))
+        print(rnn_model(sess.run(iterate), 100,15))
     
 main()
