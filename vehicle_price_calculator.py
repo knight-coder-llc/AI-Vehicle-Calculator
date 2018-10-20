@@ -6,8 +6,8 @@ Created on Sun Oct 14 17:01:28 2018
 """
 
 import tensorflow as tf
-import csv
-import pandas as pd
+#import csv
+#import pandas as pd
 import numpy as np
 
 #create rnn model
@@ -39,28 +39,12 @@ def main():
     # list of vehicle makes
     vehicle_Make = list(set(df['Make']))
     #print(len(vehicle_Make))
-    #print(vehicle_Make)
-    
-    #list of models
-    vehicle_Models = list(set(df['Model']))
-    #print(vehicle_Models)
-    
-    # list of vehicle types
-    vehicle_Types = list(set(df['Type']))
-    #print(vehicle_Types)
-    
-    # list of vehicle origin
-    vehicle_Origin = list(set(df['Origin']))
-    #print(vehicle_Origin)
-    
-    # List of engine sizes
-    vehicle_eng = list(set(df['EngineSize']))
-    print(vehicle_eng)
-    # lets create at tensor of string type (rank 1 tensor)'''
+    #print(vehicle_Make)'''
     
     #read csv file, create an input pipeline
     CSV_PATH = './CARS.csv'
     dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=100, header= True)
+   
     #print(dataset.batch(100))
     '''x = np.random.sample((100,2))
     
@@ -86,7 +70,7 @@ def main():
     
     with tf.Session() as sess:
         sess.run(iterator.initializer, feed_dict={ x: data})
-        #print(sess.run(iterate))
-        print(rnn_model(sess.run(iterate), 100,15))
+        print(sess.run(iterate))
+        #print(rnn_model(sess.run(iterate), 100,15))
     
 main()
