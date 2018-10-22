@@ -9,6 +9,12 @@ import tensorflow as tf
 #import pandas as pd
 import numpy as np
 
+def input_csv():
+    CSV_PATH = './CARS.csv'
+    dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=100, header=True)
+    
+    return dataset
+
 #create rnn model
 def rnn_model(data, num_hidden, num_labels):
     
@@ -41,8 +47,7 @@ def main():
     #print(vehicle_Make)'''
     
     #read csv file, create an input pipeline
-    CSV_PATH = './CARS.csv'
-    dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=100, header= True)
+    dataset = input_csv()
    
     #print(dataset.batch(100))
     '''x = np.random.sample((100,2))
