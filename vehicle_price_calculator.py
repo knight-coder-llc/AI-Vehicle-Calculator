@@ -12,7 +12,7 @@ import numpy as np
 def input_csv():
     CSV_PATH = './CARS.csv'
     dataset = tf.contrib.data.make_csv_dataset(CSV_PATH, batch_size=100, header=True)
-    
+    # updated dataset = tf.data.experimental.make_csv_dataset(CSV_PATH, batch_size=100, header=True)
     return dataset
 
 #create rnn model
@@ -48,7 +48,7 @@ def main():
     
     #read csv file, create an input pipeline
     dataset = input_csv()
-   
+    print(dataset)
     #print(dataset.batch(100))
     '''x = np.random.sample((100,2))
     
@@ -61,7 +61,7 @@ def main():
         print(sess.run(my_data))'''
 
     # use a placeholder
-    x = tf.placeholder(tf.float32, shape=[None,2])
+    '''x = tf.placeholder(tf.float32, shape=[None,2])
     
     # create random float sampling
     data = np.random.sample((100,2))
@@ -75,6 +75,6 @@ def main():
     with tf.Session() as sess:
         sess.run(iterator.initializer, feed_dict={ x: data})
         print(sess.run(iterate))
-        #print(rnn_model(sess.run(iterate), 100,15))
+        #print(rnn_model(sess.run(iterate), 100,15))'''
     
 main()
