@@ -9,7 +9,7 @@ from keras.utils import to_categorical
 
 
 def main():
-    dataset = pd.read_csv('drive/My Drive/app/CARS.csv')
+    dataset = pd.read_csv('CARS.csv')
     df = pd.DataFrame(dataset)
 
     print(df)
