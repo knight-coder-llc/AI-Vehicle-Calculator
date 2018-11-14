@@ -7,27 +7,23 @@ import re
 import seaborn as sns
 from math import floor, ceil
 from pylab import rcParams
-​
+
 %matplotlib inline
-[ ]
 
 # set styles for plots and graphs
-​
 sns.set(style='ticks', palette='Spectral', font_scale=1.5)
-​
+
 palette = ['#4caf50', '#2196f3', '#9e9e9e', '#ff9800', '#607d8b', '#9c27b0']
 sns.set_palette(palette)
 rcParams['figure.figsize'] = 16, 8
-​
+
 plt.xkcd()
 random_state = 42
 np.random.seed(random_state)
 tf.set_random_seed(random_state)
-[ ]
 
 def encode(series):
   return pd.get_dummies(series.astype(str))
-[ ]
 
 def multilayer_Rnn(x, weights, biases, keep_prob):
   layer_1 = tf.add(tf.matmul(x, weights['h1']), biases['b1'])
@@ -35,7 +31,6 @@ def multilayer_Rnn(x, weights, biases, keep_prob):
   layer_1 = tf.nn.dropout(layer_1, keep_prob)
   out_layer = tf.matmul(layer_1, weights['out']) + biases['out']
   return out_layer
-[ ]
 
 def main():
   
