@@ -35,7 +35,7 @@ def multilayer_Rnn(x, weights, biases, keep_prob):
 def main():
   
   # read in data csv file
-  data = pd.read_csv('CARS.csv')
+  data = pd.read_csv('/content/drive/My Drive/app/CARS.csv')
   
   #fill in any missing data
   #print(data.describe())
@@ -54,55 +54,56 @@ def main():
   #train_x['DriveTrain'] = data['DriveTrain']
   
   train_x = pd.concat([encode(data['Model']), encode(data['Type']), encode(data['Origin']), encode(data['DriveTrain']),data['EngineSize'], 
-                       data['Cylinders'], data['Horsepower'], data['MPG_City'], data['MPG_Highway'],data['Weight'], data['Wheelbase'], data['Length']], axis=1)
-  
-  #print(train_x)
+                       data['Cylinders'], data['Horsepower'], data['MPG_City'], data['MPG_Highway'],data['Weight'], data['Wheelbase'], data['Length']], verify_integrity=True, axis=1)
   
   values = []
   #convert to integer?
   for i, string in enumerate(data['MSRP']):
-    values.append(int(re.sub('\$|,','',string)))
+    values.append(float(re.sub('\$|,','',string)))
   
   data['MSRP2'] = values
-  #print(data['MSRP2'].dtype)
   
-  train_y = data['MSRP2']
+  #print(data['MSRP2'])
   
+  train_y = encode(data['MSRP'])
+  #print(train_y)
+  #train_y = data['MSRP2']
+  #print(train_y.shape)
   #print(train_y.shape)
   
   n_hidden_1 = 38
-  n_classes = train_x.shape[1]
   
   n_input = train_x.shape[1] # 445 column inputs
-  n_classes = train_y.shape[0] # 428 rows
-  
+  n_classes = train_y.shape[1] # 410 classes
+  print(n_classes)
   weights = { 'h1': tf.Variable(tf.random_normal([n_input, n_hidden_1])), 'out': tf.Variable(tf.random_normal([n_hidden_1,n_classes]))}
   biases = {'b1': tf.Variable(tf.random_normal([n_hidden_1])), 'out': tf.Variable(tf.random_normal([n_classes]))}
   
-  keep_prob = tf.placeholder('float')
+  keep_prob = tf.placeholder('float32')
   
-  training_epochs = 1 #5000
+  training_epochs = 15000
   display_step = 1000
   batch_size = 10
   
-  x = tf.placeholder('float', [None, n_input])
-  y = tf.placeholder('float', [None])
+  x = tf.placeholder('float32', [None, n_input]) # (?, 445)
+  y = tf.placeholder('float32', [None,n_classes]) # (?, 410)
   
   # split into training and testing data
-  train_size = 0.9
+  train_size = 0.9 # 90% training data
   
-  train_cnt = floor(train_x.shape[0] * train_size)
+  train_cnt = floor(train_x.shape[0] * train_size) # floor(428 * .9)
+  # split by rows
   x_train = train_x.iloc[0:train_cnt].values
   y_train = train_y.iloc[0:train_cnt].values
   
   x_test = train_x.iloc[train_cnt:].values
   y_test =train_y.iloc[train_cnt:].values
   
-  predictions = multilayer_Rnn(x, weights, biases, keep_prob)
+  predictions = multilayer_Rnn(x, weights, biases, keep_prob) #Tensor("add_5:0", shape=(?, 428), dtype=float32)
   
   cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=predictions, labels=y))
   
-  optimize = tf.train.AdamOptimizer(learning_rate=0.01).minimize(cost)
+  optimize = tf.train.AdamOptimizer(learning_rate=0.1).minimize(cost)
   
   with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -112,14 +113,14 @@ def main():
         total_batch = 5 #int(len(x_train) / batch_size)
       
         x_batches = np.array_split(x_train, total_batch)
-        print(x_batches[1].shape)
+        
         y_batches = np.array_split(y_train, total_batch)
-        print(y_batches[0].shape)
         
         # issue with cost function labels
         for i in range(total_batch):
             batch_x, batch_y = x_batches[i], y_batches[i]
-            #print(batch_x.shape)
+            
+            #print(batch_y[0])
             _, c = sess.run([optimize, cost], 
                             feed_dict={
                                 x: batch_x, 
